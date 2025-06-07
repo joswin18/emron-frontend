@@ -1,0 +1,24 @@
+<aside class="admin-sidebar">
+    <nav class="admin-sidebar-nav">
+        <a href="/admin" class="admin-sidebar-link <%= locals.currentUrl === '/admin' ? 'active' : '' %>">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/admin/products" class="admin-sidebar-link <%= locals.currentUrl === '/admin/products' ? 'active' : '' %>">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="/admin/products/add" class="admin-sidebar-link <%= locals.currentUrl === '/admin/products/add' ? 'active' : '' %>">
+            <i class="fas fa-plus"></i>
+            <span>Add Product</span>
+        </a>
+        <a href="/admin/categories" class="admin-sidebar-link <%= locals.currentUrl === '/admin/categories' ? 'active' : '' %>">
+            <i class="fas fa-tags"></i>
+            <span>Categories</span>
+        </a>
+        <!-- <a href="/admin/settings" class="admin-sidebar-link <%= locals.currentUrl === '/admin/settings' ? 'active' : '' %>">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a> -->
+    </nav>
+</aside>

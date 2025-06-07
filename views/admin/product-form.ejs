@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= isEdit ? 'Edit Product' : 'Add New Product' %> - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Include header -->
+    <%- include('partials/header') %>
+    
+    <div class="admin-layout">
+        <!-- Include sidebar -->
+        <%- include('partials/sidebar') %>
+        
+        <main class="admin-main">
+            <!-- Alerts -->
+            <% if (locals.success) { %>
+                <div class="admin-alert admin-alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <%= success %>
+                </div>
+            <% } %>
+            
+            <% if (locals.error) { %>
+                <div class="admin-alert admin-alert-error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <div class="admin-page-header">
+                <h1 class="admin-page-title"><%= isEdit ? 'Edit Product' : 'Add New Product' %></h1>
+                <a href="/admin/products" class="admin-btn admin-btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Products
+                </a>
+            </div>
+
+            <form class="admin-product-form" action="<%= isEdit ? `/admin/products/edit/${product._id}` : '/admin/products' %>" method="POST" enctype="multipart/form-data">
+                <div class="admin-form-grid">
+                    <!-- Basic Information -->
+                    <div class="admin-form-section">
+                        <h3 class="admin-form-section-title">Basic Information</h3>
+                        
+                        <div class="admin-form-group">
+                            <label for="name" class="admin-form-label">Product Name *</label>
+                            <input type="text" id="name" name="name" class="admin-form-input" 
+                                   value="<%= isEdit ? product.name : '' %>" required>
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label for="description" class="admin-form-label">Description *</label>
+                            <textarea id="description" name="description" class="admin-form-textarea" rows="4" required><%= isEdit ? product.description : '' %></textarea>
+                        </div>
+
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="category" class="admin-form-label">Category *</label>
+                                <select id="category" name="category" class="admin-form-select" required>
+                                    <option value="">Select Category</option>
+                                    <% categories.forEach(category => { %>
+                                        <option value="<%= category.name %>" <%= isEdit && product.category === category.name ? 'selected' : '' %>>
+                                            <%= category.name %>
+                                        </option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="admin-form-group">
+                                <label for="brand" class="admin-form-label">Brand *</label>
+                                <input type="text" id="brand" name="brand" class="admin-form-input" 
+                                       value="<%= isEdit ? product.brand : '' %>" required>
+                            </div>
+                        </div>
+
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="model" class="admin-form-label">Model *</label>
+                                <input type="text" id="model" name="model" class="admin-form-input" 
+                                       value="<%= isEdit ? product.model : '' %>" required>
+                            </div>
+
+                            <div class="admin-form-group">
+                                <label for="price" class="admin-form-label">Price (₹) *</label>
+                                <input type="number" id="price" name="price" class="admin-form-input" 
+                                       value="<%= isEdit ? product.price : '' %>" step="0.01" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label class="admin-form-checkbox">
+                                    <input type="checkbox" name="inStock" value="true" <%= isEdit && product.inStock ? 'checked' : '' %>>
+                                    <span class="admin-form-checkbox-label">In Stock</span>
+                                </label>
+                            </div>
+
+                            <div class="admin-form-group">
+                                <label class="admin-form-checkbox">
+                                    <input type="checkbox" name="featured" value="true" <%= isEdit && product.featured ? 'checked' : '' %>>
+                                    <span class="admin-form-checkbox-label">Featured Product</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="admin-form-section">
+                        <h3 class="admin-form-section-title">Product Images</h3>
+                        
+                        <% if (isEdit && product.images && product.images.length > 0) { %>
+                            <div class="admin-existing-images">
+                                <h4>Current Images</h4>
+                                <div class="admin-image-grid">
+                                    <% product.images.forEach((image, index) => { %>
+                                        <div class="admin-image-item">
+                                            <img src="<%= image.thumbnail || image.url %>" alt="<%= image.alt %>" class="admin-image-preview">
+                                            <button type="button" class="admin-image-delete" onclick="deleteImage('<%= product._id %>', <%= index %>)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        <% } %>
+
+                        <div class="admin-form-group">
+                            <label for="images" class="admin-form-label">Add New Images</label>
+                            <div class="admin-file-upload">
+                                <input type="file" id="images" name="images" class="admin-file-input" multiple accept="image/*">
+                                <label for="images" class="admin-file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Choose images or drag and drop</span>
+                                    <small>Maximum 5 images, 5MB each. Supported: JPG, PNG, WebP</small>
+                                </label>
+                            </div>
+                            <div id="imagePreview" class="admin-image-preview-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specifications -->
+                <div class="admin-form-section">
+                    <h3 class="admin-form-section-title">Technical Specifications</h3>
+                    
+                    <div class="admin-form-row">
+                        <div class="admin-form-group">
+                            <label for="voltage" class="admin-form-label">Voltage</label>
+                            <input type="text" id="voltage" name="specifications[voltage]" class="admin-form-input" 
+                                   value="<%= isEdit && product.specifications ? product.specifications.voltage || '' : '' %>">
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label for="current" class="admin-form-label">Current</label>
+                            <input type="text" id="current" name="specifications[current]" class="admin-form-input" 
+                                   value="<%= isEdit && product.specifications ? product.specifications.current || '' : '' %>">
+                        </div>
+                    </div>
+
+                    <div class="admin-form-row">
+                        <div class="admin-form-group">
+                            <label for="power" class="admin-form-label">Power</label>
+                            <input type="text" id="power" name="specifications[power]" class="admin-form-input" 
+                                   value="<%= isEdit && product.specifications ? product.specifications.power || '' : '' %>">
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label for="frequency" class="admin-form-label">Frequency</label>
+                            <input type="text" id="frequency" name="specifications[frequency]" class="admin-form-input" 
+                                   value="<%= isEdit && product.specifications ? product.specifications.frequency || '' : '' %>">
+                        </div>
+                    </div>
+
+                    <div class="admin-form-row">
+                        <div class="admin-form-group">
+                            <label for="material" class="admin-form-label">Material</label>
+                            <input type="text" id="material" name="specifications[material]" class="admin-form-input" 
+                                   value="<%= isEdit && product.specifications ? product.specifications.material || '' : '' %>">
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label for="dimensions" class="admin-form-label">Dimensions</label>
+                            <input type="text" id="dimensions" name="specifications[dimensions]" class="admin-form-input" 
+                                   value="<%= isEdit && product.specifications ? product.specifications.dimensions || '' : '' %>">
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label for="weight" class="admin-form-label">Weight</label>
+                        <input type="text" id="weight" name="specifications[weight]" class="admin-form-input" 
+                               value="<%= isEdit && product.specifications ? product.specifications.weight || '' : '' %>">
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="admin-form-section">
+                    <h3 class="admin-form-section-title">Product Features</h3>
+                    
+                    <div class="admin-form-group">
+                        <label for="features" class="admin-form-label">Features (comma-separated)</label>
+                        <textarea id="features" name="features" class="admin-form-textarea" rows="3" 
+                                  placeholder="Feature 1, Feature 2, Feature 3"><%= isEdit && product.features ? product.features.join(', ') : '' %></textarea>
+                        <small class="admin-form-help">Enter each feature separated by commas</small>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="admin-form-actions">
+                    <button type="submit" class="admin-btn admin-btn-primary">
+                        <i class="fas fa-save"></i>
+                        <%= isEdit ? 'Update Product' : 'Create Product' %>
+                    </button>
+                    <a href="/admin/products" class="admin-btn admin-btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

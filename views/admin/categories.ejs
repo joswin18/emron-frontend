@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Include header and sidebar -->
+    <%- include('partials/header') %>
+    
+    <div class="admin-layout">
+        <%- include('partials/sidebar') %>
+        
+        <main class="admin-main">
+            <div class="admin-page-header">
+                <h1 class="admin-page-title">Categories</h1>
+                <button class="admin-btn admin-btn-primary" onclick="showAddCategoryModal()">
+                    <i class="fas fa-plus"></i> Add New Category
+                </button>
+            </div>
+
+            <!-- Categories list -->
+            <div class="admin-grid">
+                <% categories.forEach(category => { %>
+                    <div class="admin-category-card">
+                        <h3><%= category.name %></h3>
+                        <div class="admin-category-actions">
+                            <button class="admin-btn admin-btn-sm" onclick="editCategory('<%= category._id %>')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="admin-btn admin-btn-sm admin-btn-danger" onclick="deleteCategory('<%= category._id %>')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

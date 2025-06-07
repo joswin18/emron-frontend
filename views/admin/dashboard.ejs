@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EMRON Electricals</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-container">
+            <div class="admin-nav-brand">
+                <a href="/admin" class="admin-brand-link">
+                    <span class="logo-icon">⚡</span>
+                    <span>EMRON Admin</span>
+                </a>
+            </div>
+            
+            <nav class="admin-nav">
+                <a href="/" class="admin-nav-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Site
+                </a>
+                <a href="/admin/logout" class="admin-nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <%- include('partials/sidebar') %>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <% if (locals.success) { %>
+                <div class="admin-alert admin-alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <%= success %>
+                </div>
+            <% } %>
+            
+            <% if (locals.error) { %>
+                <div class="admin-alert admin-alert-error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <div class="admin-page-header">
+                <h1 class="admin-page-title">Dashboard</h1>
+                <p class="admin-page-subtitle">Overview of your electrical products store</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="admin-stats-grid">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="admin-stat-content">
+                        <h3 class="admin-stat-number"><%= stats.overview.totalProducts %></h3>
+                        <p class="admin-stat-label">Total Products</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon featured">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="admin-stat-content">
+                        <h3 class="admin-stat-number"><%= stats.overview.featuredProducts %></h3>
+                        <p class="admin-stat-label">Featured Products</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="admin-stat-content">
+                        <h3 class="admin-stat-number"><%= stats.overview.inStockProducts %></h3>
+                        <p class="admin-stat-label">In Stock</p>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="admin-stat-content">
+                        <h3 class="admin-stat-number"><%= stats.overview.outOfStockProducts %></h3>
+                        <p class="admin-stat-label">Out of Stock</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Tables Row -->
+            <div class="admin-dashboard-row">
+                <!-- Categories Chart -->
+                <div class="admin-dashboard-card">
+                    <div class="admin-card-header">
+                        <h3>Products by Category</h3>
+                    </div>
+                    <div class="admin-card-content">
+                        <div class="admin-category-list">
+                            <% stats.categories.forEach(category => { %>
+                                <div class="admin-category-item">
+                                    <span class="admin-category-name"><%= category._id %></span>
+                                    <span class="admin-category-count"><%= category.count %></span>
+                                    <div class="admin-category-bar">
+                                        <div class="admin-category-progress" style="width: <%= (category.count / stats.overview.totalProducts) * 100 %>%"></div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Products -->
+                <div class="admin-dashboard-card">
+                    <div class="admin-card-header">
+                        <h3>Recent Products</h3>
+                        <a href="/admin/products" class="admin-btn admin-btn-sm">View All</a>
+                    </div>
+                    <div class="admin-card-content">
+                        <div class="admin-recent-products">
+                            <% stats.recentProducts.forEach(product => { %>
+                                <div class="admin-recent-product">
+                                    <div class="admin-recent-product-info">
+                                        <h4 class="admin-recent-product-name"><%= product.name %></h4>
+                                        <p class="admin-recent-product-meta">
+                                            <%= product.category %> • ₹<%= product.price.toLocaleString() %>
+                                        </p>
+                                    </div>
+                                    <div class="admin-recent-product-status">
+                                        <span class="admin-status-badge <%= product.inStock ? 'success' : 'danger' %>">
+                                            <%= product.inStock ? 'In Stock' : 'Out of Stock' %>
+                                        </span>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price Statistics -->
+            <div class="admin-dashboard-card">
+                <div class="admin-card-header">
+                    <h3>Price Statistics</h3>
+                </div>
+                <div class="admin-card-content">
+                    <div class="admin-price-stats">
+                        <div class="admin-price-stat">
+                            <span class="admin-price-label">Average Price</span>
+                            <span class="admin-price-value">₹<%= Math.round(stats.priceStats.avgPrice).toLocaleString() %></span>
+                        </div>
+                        <div class="admin-price-stat">
+                            <span class="admin-price-label">Minimum Price</span>
+                            <span class="admin-price-value">₹<%= stats.priceStats.minPrice.toLocaleString() %></span>
+                        </div>
+                        <div class="admin-price-stat">
+                            <span class="admin-price-label">Maximum Price</span>
+                            <span class="admin-price-value">₹<%= stats.priceStats.maxPrice.toLocaleString() %></span>
+                        </div>
+                        <div class="admin-price-stat">
+                            <span class="admin-price-label">Total Inventory Value</span>
+                            <span class="admin-price-value">₹<%= stats.priceStats.totalValue.toLocaleString() %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="admin-quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="admin-action-buttons">
+                    <a href="/admin/products/add" class="admin-btn admin-btn-primary">
+                        <i class="fas fa-plus"></i> Add New Product
+                    </a>
+                    <a href="/admin/products/export" class="admin-btn admin-btn-secondary">
+                        <i class="fas fa-download"></i> Export Products
+                    </a>
+                    <a href="/admin/products" class="admin-btn admin-btn-outline">
+                        <i class="fas fa-box"></i> Manage Products
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>
