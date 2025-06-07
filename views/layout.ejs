@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <a href="/" class="brand-link">
+                        <div class="logo">
+                            <span class="logo-icon">⚡</span>
+                            <div class="brand-text">
+                                <span class="brand-name">EMRON</span>
+                                <span class="brand-subtitle">ELECTRICALS</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="nav-menu" id="navMenu">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/products" class="nav-link">Products</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle">Categories</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/category/Switches">Switches</a></li>
+                                <li><a href="/category/Sockets">Sockets</a></li>
+                                <li><a href="/category/Cables">Cables</a></li>
+                                <li><a href="/category/Lighting">Lighting</a></li>
+                                <li><a href="/category/Circuit Breakers">Circuit Breakers</a></li>
+                                <li><a href="/category/Panels">Panels</a></li>
+                                <li><a href="/category/Motors">Motors</a></li>
+                                <li><a href="/category/Transformers">Transformers</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-toggle" id="navToggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <%- body %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-icon">⚡</span>
+                        <div class="brand-text">
+                            <span class="brand-name">EMRON</span>
+                            <span class="brand-subtitle">ELECTRICALS</span>
+                        </div>
+                    </div>
+                    <p class="footer-tagline">Where Quality Meets Your Electrical Needs</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> NJ Tower, Ezhuthupally, Kurumpanadom PO</p>
+                        <p><i class="fas fa-phone"></i> 9539 744 434, 9562 944 434</p>
+                        <p><i class="fas fa-envelope"></i> emronelectrical@gmail.com</p>
+                        <p><i class="fas fa-globe"></i> www.emronelectricals.com</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">All Products</a></li>
+                        <li><a href="/category/Switches">Switches</a></li>
+                        <li><a href="/category/Lighting">Lighting</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 EMRON Electricals. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

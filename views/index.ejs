@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Quality Electrical Products</h1>
+                <p class="hero-subtitle">Where Quality Meets Your Electrical Needs</p>
+                <a href="/products" class="btn btn-primary">Explore Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <h2 class="section-title">Product Categories</h2>
+            <div class="categories-grid">
+                <% if (locals.categories && categories.length > 0) { %>
+                    <% categories.forEach(category => { %>    
+                        <div class="category-card">
+                            <a href="/category/<%= category %>" class="category-link">
+                                <div class="category-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h3 class="category-name"><%= category %></h3>
+                            </a>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No categories found</p>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-section">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid">
+                <% if (locals.featuredProducts && featuredProducts.length > 0) { %>
+                    <% featuredProducts.forEach(product => { %>
+                        <div class="product-card">
+                            <a href="/product/<%= product._id %>" class="product-link">
+                                <div class="product-image">
+                                    <% if (product.images && product.images.length > 0) { %>
+                                        <img src="<%= product.images[0].url %>" alt="<%= product.images[0].alt || product.name %>">
+                                    <% } else { %>
+                                        <div class="placeholder-image">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    <% } %>
+                                </div>
+                                <div class="product-info">
+                                    <h3 class="product-name"><%= product.name %></h3>
+                                    <p class="product-brand"><%= product.brand %></p>
+                                    <p class="product-price">₹<%= product.price.toLocaleString() %></p>
+                                    <span class="product-category"><%= product.category %></span>
+                                </div>
+                            </a>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No featured products available</p>
+                <% } %>
+            </div>
+            
+            <div class="text-center">
+                <a href="/products" class="btn btn-outline">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">About EMRON Electricals</h2>
+                <p class="about-text">
+                    EMRON Electricals is your trusted partner for quality electrical products. 
+                    We specialize in providing a comprehensive range of electrical components, 
+                    from switches and sockets to industrial motors and transformers. 
+                    Our commitment to quality and customer satisfaction has made us a preferred 
+                    choice for electrical solutions.
+                </p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <i class="fas fa-award"></i>
+                        <h3>Quality Products</h3>
+                        <p>Premium electrical components from trusted brands</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shipping-fast"></i>
+                        <h3>Fast Delivery</h3>
+                        <p>Quick and reliable delivery across the region</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-headset"></i>
+                        <h3>Expert Support</h3>
+                        <p>Professional guidance and technical support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <section class="product-detail">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/">Home</a>
+                <span>/</span>
+                <a href="/products">Products</a>
+                <span>/</span>
+                <a href="/category/<%= product.category %>"><%= product.category %></a>
+                <span>/</span>
+                <span><%= product.name %></span>
+            </nav>
+
+            <!-- Product Details -->
+            <div class="product-detail-container">
+                <div class="product-images">
+                    <div class="main-image">
+                        <% if (product.images && product.images.length > 0) { %>
+                            <img src="<%= product.images[0].url %>" alt="<%= product.images[0].alt || product.name %>" id="mainImage">
+                        <% } else { %>
+                            <div class="placeholder-image">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <% if (product.images && product.images.length > 1) { %>
+                        <div class="thumbnail-images">
+                            <% product.images.forEach((image, index) => { %>
+                                <img src="<%= image.url %>" alt="<%= image.alt || product.name %>" 
+                                     class="thumbnail <%= index === 0 ? 'active' : '' %>"
+                                     onclick="changeMainImage('<%= image.url %>', this)">
+                            <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="product-info">
+                    <div class="product-header">
+                        <h1 class="product-title"><%= product.name %></h1>
+                        <span class="product-category-badge"><%= product.category %></span>
+                    </div>
+
+                    <div class="product-meta">
+                        <p class="product-brand"><strong>Brand:</strong> <%= product.brand %></p>
+                        <p class="product-model"><strong>Model:</strong> <%= product.model %></p>
+                        <p class="product-price">₹<%= product.price.toLocaleString() %></p>
+                        
+                        <div class="stock-status">
+                            <% if (product.inStock) { %>
+                                <span class="in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                            <% } else { %>
+                                <span class="out-of-stock"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="product-description">
+                        <h3>Description</h3>
+                        <p><%= product.description %></p>
+                    </div>
+
+                    <% if (product.features && product.features.length > 0) { %>
+                        <div class="product-features">
+                            <h3>Key Features</h3>
+                            <ul class="features-list">
+                                <% product.features.forEach(feature => { %>
+                                    <li><i class="fas fa-check"></i> <%= feature %></li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                    <% } %>
+
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="showContactInfo()">
+                            <i class="fas fa-phone"></i> Contact for Inquiry
+                        </button>
+                        <button class="btn btn-outline" onclick="shareProduct()">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specifications -->
+            <% if (product.specifications) { %>
+                <div class="specifications-section">
+                    <h2>Technical Specifications</h2>
+                    <div class="specifications-grid">
+                        <% Object.entries(product.specifications).forEach(([key, value]) => { %>
+                            <% if (value) { %>
+                                <div class="spec-item">
+                                    <span class="spec-label"><%= key.charAt(0).toUpperCase() + key.slice(1) %>:</span>
+                                    <span class="spec-value"><%= value %></span>
+                                </div>
+                            <% } %>
+                        <% }) %>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Related Products -->
+            <% if (relatedProducts.length > 0) { %>
+                <div class="related-products">
+                    <h2>Related Products</h2>
+                    <div class="products-grid">
+                        <% relatedProducts.forEach(relatedProduct => { %>
+                            <div class="product-card">
+                                <a href="/product/<%= relatedProduct._id %>" class="product-link">
+                                    <div class="product-image">
+                                        <% if (relatedProduct.images && relatedProduct.images.length > 0) { %>
+                                            <img src="<%= relatedProduct.images[0].url %>" alt="<%= relatedProduct.images[0].alt || relatedProduct.name %>">
+                                        <% } else { %>
+                                            <div class="placeholder-image">
+                                                <i class="fas fa-image"></i>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    <div class="product-info">
+                                        <h3 class="product-name"><%= relatedProduct.name %></h3>
+                                        <p class="product-brand"><%= relatedProduct.brand %></p>
+                                        <p class="product-price">₹<%= relatedProduct.price.toLocaleString() %></p>
+                                    </div>
+                                </a>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <section class="products-page">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Our Products</h1>
+                <p class="page-subtitle">Discover our comprehensive range of electrical products</p>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="filters-section">
+                <div class="search-box">
+                    <form action="/products" method="GET" class="search-form">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Search products..." 
+                            value="<%= locals.searchTerm || '' %>" 
+                            class="search-input"
+                        >
+                        <input 
+                            type="hidden" 
+                            name="category" 
+                            value="<%= locals.currentCategory || 'all' %>"
+                        >
+                        <input 
+                            type="hidden" 
+                            name="sort" 
+                            value="<%= locals.currentSort || 'newest' %>"
+                        >
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="filter-controls">
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <label for="category">Category:</label>
+                        <select name="category" id="category" class="filter-select" onchange="filterProducts()">
+                            <option value="all" <%= currentCategory === 'all' ? 'selected' : '' %>>All Categories</option>
+                            <% categories.forEach(category => { %>
+                                <option value="<%= category %>" <%= currentCategory === category ? 'selected' : '' %>>
+                                    <%= category %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- Sort Filter -->
+                    <div class="filter-group">
+                        <label for="sort">Sort by:</label>
+                        <select name="sort" id="sort" class="filter-select" onchange="filterProducts()">
+                            <option value="newest" <%= currentSort === 'newest' ? 'selected' : '' %>>Newest</option>
+                            <option value="name" <%= currentSort === 'name' ? 'selected' : '' %>>Name</option>
+                            <option value="price-low" <%= currentSort === 'price-low' ? 'selected' : '' %>>Price: Low to High</option>
+                            <option value="price-high" <%= currentSort === 'price-high' ? 'selected' : '' %>>Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-container">
+                <% if (products.length > 0) { %>
+                    <div class="products-grid">
+                        <% products.forEach(product => { %>
+                            <div class="product-card">
+                                <a href="/product/<%= product._id %>" class="product-link">
+                                    <div class="product-image">
+                                        <% if (product.images && product.images.length > 0) { %>
+                                            <img src="<%= product.images[0].url %>" alt="<%= product.images[0].alt || product.name %>">
+                                        <% } else { %>
+                                            <div class="placeholder-image">
+                                                <i class="fas fa-image"></i>
+                                            </div>
+                                        <% } %>
+                                        <% if (product.featured) { %>
+                                            <span class="featured-badge">Featured</span>
+                                        <% } %>
+                                    </div>
+                                    <div class="product-info">
+                                        <h3 class="product-name"><%= product.name %></h3>
+                                        <p class="product-brand"><%= product.brand %></p>
+                                        <p class="product-model">Model: <%= product.model %></p>
+                                        <p class="product-price">₹<%= product.price.toLocaleString() %></p>
+                                        <span class="product-category"><%= product.category %></span>
+                                        <% if (!product.inStock) { %>
+                                            <span class="out-of-stock">Out of Stock</span>
+                                        <% } %>
+                                    </div>
+                                </a>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div class="no-products">
+                        <i class="fas fa-search"></i>
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search criteria or browse all categories.</p>
+                        <a href="/products" class="btn btn-primary">View All Products</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
