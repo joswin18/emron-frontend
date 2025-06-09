@@ -37,16 +37,22 @@
                     </thead>
                     <tbody>
                         <% products.forEach(product => { %>
-                            <tr>
-                                <td><%= product.name %></td>
-                                <td><%= product.category %></td>
-                                <td>₹<%= product.price.toLocaleString() %></td>
-                                <td>
+                            <tr style="height: 60px;"></tr>
+                                <td style="padding: 16px 20px;"><%= product.name %></td>
+                                <td style="padding: 16px 20px;">
+                                    <% if (product.category && product.category.name) { %>
+                                        <%= product.category.name %>
+                                    <% } else { %>
+                                        <span class="text-muted">Uncategorized</span>
+                                    <% } %>
+                                </td>
+                                <td style="padding: 16px 20px;">₹<%= product.price.toLocaleString() %></td>
+                                <td style="padding: 16px 20px;">
                                     <span class="admin-status-badge <%= product.inStock ? 'success' : 'danger' %>">
                                         <%= product.inStock ? 'In Stock' : 'Out of Stock' %>
                                     </span>
                                 </td>
-                                <td>
+                                <td style="padding: 16px 20px;">
                                     <div class="admin-table-actions">
                                         <a href="/admin/products/edit/<%= product._id %>" class="admin-btn admin-btn-sm">
                                             <i class="fas fa-edit"></i> Edit

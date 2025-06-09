@@ -61,11 +61,15 @@
                                 <label for="category" class="admin-form-label">Category *</label>
                                 <select id="category" name="category" class="admin-form-select" required>
                                     <option value="">Select Category</option>
-                                    <% categories.forEach(category => { %>
-                                        <option value="<%= category.name %>" <%= isEdit && product.category === category.name ? 'selected' : '' %>>
-                                            <%= category.name %>
-                                        </option>
-                                    <% }) %>
+                                    <% if (Array.isArray(categories) && categories.length > 0) { %>
+                                        <% categories.forEach(category => { %>
+                                            <option value="<%= category._id %>" 
+                                                    <%= isEdit && product.category && product.category._id && 
+                                                        product.category._id.toString() === category._id.toString() ? 'selected' : '' %>>
+                                                <%= category.name %>
+                                            </option>
+                                        <% }) %>
+                                    <% } %>
                                 </select>
                             </div>
 

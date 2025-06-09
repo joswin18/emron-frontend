@@ -28,16 +28,18 @@
                 <% if (categories && categories.length > 0) { %>
                     <% categories.forEach(category => { %>
                         <div class="admin-category-card">
-                            <h3><%= category.name %></h3>
-                            <p class="admin-category-count">Products: <%= category.productCount || 0 %></p>
-                            <div class="admin-category-actions">
-                                <button class="admin-btn admin-btn-sm" onclick="editCategory('<%= category._id %>', '<%= category.name %>')">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="admin-btn admin-btn-sm admin-btn-danger" onclick="deleteCategory('<%= category._id %>')">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
+                            <div class="admin-category-header">
+                                <h3><%= category.name %></h3>
+                                <div class="admin-category-actions">
+                                    <button class="admin-btn admin-btn-icon" onclick="editCategory('<%= category._id %>', '<%= category.name %>')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="admin-btn admin-btn-icon admin-btn-danger" onclick="deleteCategory('<%= category._id %>')" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
+                            <p class="admin-category-count">Products: <%= category.productCount || 0 %></p>
                         </div>
                     <% }) %>
                 <% } else { %>

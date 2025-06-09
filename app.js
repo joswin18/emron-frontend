@@ -136,17 +136,26 @@ app.get('/admin', async (req, res) => {
 // Admin routes
 app.get('/admin/products', async (req, res) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/products`);
+        const productsResponse = await axios.get(`${API_BASE_URL}/products`);
+        const categoriesResponse = await axios.get(`${API_BASE_URL}/categories`);
+        
+        const products = productsResponse.data.products.map(product => ({
+            ...product,
+            category: categoriesResponse.data.categories.find(c => 
+                c._id === product.category
+            )
+        }));
+
         res.render('admin/products', {
-            products: response.data.products || [],
-            currentUrl: '/admin/products',  // Add this line
-            success: req.flash('success'),
-            error: req.flash('error')
+            products,
+            categories: categoriesResponse.data.categories,
+            currentUrl: '/admin/products'
         });
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error:', error);
         res.render('admin/products', {
             products: [],
+            categories: [],
             currentUrl: '/admin/products',
             error: 'Error loading products'
         });
@@ -156,10 +165,11 @@ app.get('/admin/products', async (req, res) => {
 app.get('/admin/products/add', async (req, res) => {
     try {
         const categoriesResponse = await axios.get(`${API_BASE_URL}/categories`);
+        
         res.render('admin/product-form', {
             isEdit: false,
             product: {},
-            categories: categoriesResponse.data,
+            categories: categoriesResponse.data.categories || [], // Add .categories here
             currentUrl: '/admin/products/add',
             success: req.flash('success'),
             error: req.flash('error')
@@ -176,12 +186,32 @@ app.get('/admin/products/add', async (req, res) => {
     }
 });
 
+app.get('/admin/products/edit/:id', async (req, res) => {
+    try {
+        const [productResponse, categoriesResponse] = await Promise.all([
+            axios.get(`${API_BASE_URL}/products/${req.params.id}`),
+            axios.get(`${API_BASE_URL}/categories`)
+        ]);
+
+        res.render('admin/product-form', {
+            isEdit: true,
+            product: productResponse.data.product,
+            categories: categoriesResponse.data.categories || [], // Add .categories here
+            currentUrl: `/admin/products/edit/${req.params.id}`,
+            success: req.flash('success'),
+            error: req.flash('error')
+        });
+    } catch (error) {
+        console.error('Error loading edit product form:', error);
+        res.redirect('/admin/products');
+    }
+});
+
 app.get('/admin/categories', async (req, res) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/categories`);
-        // Make sure we're getting proper array of category objects
         res.render('admin/categories', {
-            categories: response.data.categories || [], // Ensure this matches your API response structure
+            categories: response.data.categories || [],
             currentUrl: '/admin/categories',
             success: req.flash('success'),
             error: req.flash('error')
