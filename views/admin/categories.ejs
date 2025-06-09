@@ -49,6 +49,37 @@
         </main>
     </div>
 
+    <!-- Category Modal -->
+    <div id="categoryModal" class="admin-modal" style="display: none;">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="modalTitle">Add New Category</h3>
+                <button class="admin-modal-close" onclick="closeCategoryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="categoryForm" onsubmit="handleCategorySubmit(event)">
+                <div class="admin-form-group">
+                    <label for="categoryName" class="admin-form-label">Category Name *</label>
+                    <input type="text" id="categoryName" name="name" class="admin-form-input" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="categoryDescription" class="admin-form-label">Description</label>
+                    <textarea id="categoryDescription" name="description" class="admin-form-textarea" rows="3"></textarea>
+                </div>
+                <input type="hidden" id="categoryId">
+                <div class="admin-form-actions">
+                    <button type="submit" class="admin-btn admin-btn-primary">
+                        <i class="fas fa-save"></i> Save Category
+                    </button>
+                    <button type="button" class="admin-btn admin-btn-secondary" onclick="closeCategoryModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="/js/admin.js"></script>
 </body>
 </html>

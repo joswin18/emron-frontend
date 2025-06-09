@@ -196,6 +196,30 @@ app.get('/admin/categories', async (req, res) => {
     }
 });
 
+app.post('/admin/categories', async (req, res) => {
+    try {
+        await axios.post(`${API_BASE_URL}/categories`, req.body);
+        req.flash('success', 'Category created successfully');
+        res.redirect('/admin/categories');
+    } catch (error) {
+        console.error('Error creating category:', error);
+        req.flash('error', 'Error creating category');
+        res.redirect('/admin/categories');
+    }
+});
+
+app.put('/admin/categories/:id', async (req, res) => {
+    try {
+        await axios.put(`${API_BASE_URL}/categories/${req.params.id}`, req.body);
+        req.flash('success', 'Category updated successfully');
+        res.redirect('/admin/categories');
+    } catch (error) {
+        console.error('Error updating category:', error);
+        req.flash('error', 'Error updating category');
+        res.redirect('/admin/categories');
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Frontend server running on http://localhost:${PORT}`);
 });
