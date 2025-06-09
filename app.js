@@ -179,9 +179,10 @@ app.get('/admin/products/add', async (req, res) => {
 app.get('/admin/categories', async (req, res) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/categories`);
+        // Make sure we're getting proper array of category objects
         res.render('admin/categories', {
-            categories: response.data || [],
-            currentUrl: '/admin/categories',  // Add this line
+            categories: response.data.categories || [], // Ensure this matches your API response structure
+            currentUrl: '/admin/categories',
             success: req.flash('success'),
             error: req.flash('error')
         });
@@ -189,7 +190,7 @@ app.get('/admin/categories', async (req, res) => {
         console.error('Error fetching categories:', error);
         res.render('admin/categories', {
             categories: [],
-            currentUrl: '/admin/categories',  // Add this line
+            currentUrl: '/admin/categories',
             error: 'Error loading categories'
         });
     }

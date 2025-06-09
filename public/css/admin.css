@@ -277,28 +277,40 @@
 }
 
 .admin-category-count {
-  background-color: #eff6ff;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.admin-category-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-category-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.admin-category-card h3 {
+  margin: 0 0 1rem 0;
   color: #1e3a8a;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  min-width: 40px;
+}
+
+/* No Data */
+.admin-no-data {
   text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  grid-column: 1 / -1;
 }
 
-.admin-category-bar {
-  flex: 2;
-  height: 8px;
-  background-color: #f1f5f9;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.admin-category-progress {
-  height: 100%;
-  background-color: #ef4444;
-  transition: width 0.3s;
+.admin-no-data p {
+  color: #64748b;
+  margin: 0;
 }
 
 /* Recent Products */
